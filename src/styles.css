@@ -1,0 +1,81 @@
+:root {
+  color-scheme: light dark;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.layout {
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+header p {
+  margin: 4px 0 0;
+  opacity: 0.8;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab,
+.new-tab,
+.toolbar button {
+  border: 1px solid #5d5d5d;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.tab.active {
+  border-color: #42b883;
+}
+
+.close {
+  margin-left: 8px;
+  opacity: 0.7;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toolbar .export {
+  margin-left: auto;
+  background: #42b883;
+  color: #111;
+}
+
+.meta input {
+  margin-left: 8px;
+  padding: 6px;
+  min-width: 280px;
+}
+
+.editor {
+  border: 1px solid #676767;
+  border-radius: 10px;
+  min-height: 440px;
+  padding: 14px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+footer {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
