@@ -1,7 +1,7 @@
 {
   "name": "document-writer",
-  "version": "1.0.0",
-  "description": "Electron + Vue markdown document writer with tabbed WYSIWYG editing and PDF export",
+  "version": "2.0.0",
+  "description": "A modern open-source document editor with shortcodes, WYSIWYG editing and PDF export",
   "main": "electron/main.js",
   "author": "",
   "license": "MIT",
@@ -12,7 +12,29 @@
     "dist": "npm run build && electron-builder"
   },
   "dependencies": {
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "@tiptap/vue-3": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
+    "@tiptap/extension-underline": "^2.11.5",
+    "@tiptap/extension-text-align": "^2.11.5",
+    "@tiptap/extension-link": "^2.11.5",
+    "@tiptap/extension-image": "^2.11.5",
+    "@tiptap/extension-highlight": "^2.11.5",
+    "@tiptap/extension-color": "^2.11.5",
+    "@tiptap/extension-text-style": "^2.11.5",
+    "@tiptap/extension-task-list": "^2.11.5",
+    "@tiptap/extension-task-item": "^2.11.5",
+    "@tiptap/extension-table": "^2.11.5",
+    "@tiptap/extension-table-row": "^2.11.5",
+    "@tiptap/extension-table-cell": "^2.11.5",
+    "@tiptap/extension-table-header": "^2.11.5",
+    "@tiptap/extension-subscript": "^2.11.5",
+    "@tiptap/extension-superscript": "^2.11.5",
+    "@tiptap/extension-character-count": "^2.11.5",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.3",
@@ -23,7 +45,7 @@
     "wait-on": "^8.0.3"
   },
   "build": {
-    "appId": "com.example.documentwriter",
+    "appId": "com.ryvor.documentwriter",
     "productName": "Document Writer",
     "files": [
       "dist/**/*",
@@ -33,14 +55,8 @@
     "directories": {
       "buildResources": "assets"
     },
-    "mac": {
-      "target": "dmg"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": "AppImage"
-    }
+    "mac": { "target": "dmg" },
+    "win": { "target": "nsis" },
+    "linux": { "target": "AppImage" }
   }
 }

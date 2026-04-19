@@ -1,0 +1,212 @@
+/* ── TipTap editor content ───────────────────────────── */
+.tiptap {
+  outline: none;
+  padding: 48px 56px;
+  min-height: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.75;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.tiptap p            { margin: 0.5em 0; }
+.tiptap h1           { font-size: 2em;    line-height: 1.2; margin: 1em 0 0.4em; }
+.tiptap h2           { font-size: 1.5em;  line-height: 1.3; margin: 0.9em 0 0.35em; }
+.tiptap h3           { font-size: 1.2em;  line-height: 1.4; margin: 0.8em 0 0.3em; }
+.tiptap h4           { font-size: 1.05em; line-height: 1.5; margin: 0.7em 0 0.25em; font-weight: 700; }
+.tiptap h5           { font-size: 0.9em;  line-height: 1.5; margin: 0.6em 0 0.2em; font-weight: 700; }
+.tiptap h6           { font-size: 0.8em;  line-height: 1.5; margin: 0.5em 0 0.2em; font-weight: 700; color: var(--text2); }
+
+.tiptap ul,
+.tiptap ol           { padding-left: 1.8em; margin: 0.5em 0; }
+.tiptap li           { margin: 0.2em 0; }
+.tiptap li p         { margin: 0; }
+
+.tiptap a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.tiptap a:hover { opacity: 0.8; }
+
+.tiptap code {
+  font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.88em;
+  background: var(--bg3);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+.tiptap pre {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  margin: 1em 0;
+  font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+  font-size: 0.88em;
+  line-height: 1.6;
+}
+.tiptap pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.tiptap blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 16px;
+  color: var(--text2);
+  margin: 1em 0;
+  font-style: italic;
+}
+
+.tiptap hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5em 0;
+}
+
+.tiptap img {
+  max-width: 100%;
+  border-radius: 6px;
+  display: block;
+  margin: 0.5em 0;
+}
+
+/* ── Tables ───────────────────────────────────────────── */
+.tiptap table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  table-layout: fixed;
+}
+.tiptap th,
+.tiptap td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  vertical-align: top;
+  text-align: left;
+  position: relative;
+}
+.tiptap th {
+  background: var(--bg2);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.selectedCell::after {
+  background: rgba(79, 195, 247, 0.1);
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Resize handle */
+.column-resize-handle {
+  background: var(--accent);
+  bottom: -2px;
+  pointer-events: none;
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: 3px;
+  opacity: 0.5;
+}
+.tableWrapper { overflow-x: auto; }
+
+/* ── Task list ────────────────────────────────────────── */
+.tiptap ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+.tiptap ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.tiptap ul[data-type="taskList"] li > label {
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+.tiptap ul[data-type="taskList"] li > div  { flex: 1; }
+.tiptap ul[data-type="taskList"] li[data-checked="true"] > div {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* ── Highlight / colour ───────────────────────────────── */
+.tiptap mark {
+  border-radius: 2px;
+  padding: 0.1em 0;
+}
+
+/* ── Shortcode nodes ──────────────────────────────────── */
+.shortcode-node {
+  position: relative;
+  display: inline;
+  line-height: inherit;
+}
+
+.sc-value {
+  display: inline;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--sc-color);
+  text-underline-offset: 3px;
+  background: var(--sc-bg);
+  border-radius: 3px;
+  padding: 0 3px;
+  cursor: default;
+  color: inherit;
+  font-size: inherit;
+}
+
+.sc-tooltip {
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-text);
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 10px var(--shadow);
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.sc-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--tooltip-bg);
+}
+
+.shortcode-node:hover .sc-tooltip,
+.shortcode-node.is-selected .sc-tooltip { opacity: 1; }
+
+.shortcode-node.is-selected .sc-value {
+  outline: 2px solid var(--sc-color);
+  outline-offset: 1px;
+}
+
+/* ── Placeholder ─────────────────────────────────────── */
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text3);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}

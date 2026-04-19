@@ -1,144 +1,146 @@
 <template>
-  <div class="layout">
-    <header>
-      <h1>Document Writer</h1>
-      <p>Tabbed WYSIWYG editor with token replacement and PDF export.</p>
+  <div class="app" :data-theme="theme.resolved.value">
+
+    <!-- Title bar -->
+    <header class="title-bar">
+      <span class="title-bar-logo">Document Writer</span>
+      <div class="title-bar-actions">
+        <button
+          v-for="opt in themeOptions"
+          :key="opt.mode"
+          class="theme-btn"
+          :class="{ active: theme.mode.value === opt.mode }"
+          :title="opt.label"
+          @click="theme.set(opt.mode)"
+        >
+          <font-awesome-icon :icon="opt.icon" />
+        </button>
+      </div>
     </header>
 
-    <section class="tabs">
-      <button
-        v-for="doc in documents"
-        :key="doc.id"
-        :class="['tab', { active: doc.id === activeDocId }]"
-        @click="selectDoc(doc.id)"
-      >
-        {{ doc.title || 'Untitled' }}
-        <span class="close" @click.stop="closeDoc(doc.id)">×</span>
-      </button>
-      <button class="new-tab" @click="newDoc">+ New tab</button>
-    </section>
+    <!-- Tab bar -->
+    <TabBar />
 
-    <section class="toolbar">
-      <button @click="execCmd('bold')"><b>B</b></button>
-      <button @click="execCmd('italic')"><i>I</i></button>
-      <button @click="execCmd('underline')"><u>U</u></button>
-      <button @click="execCmd('insertUnorderedList')">• List</button>
-      <button @click="insertToken">Insert [curr_date]</button>
-      <button class="export" @click="exportActive">Export PDF</button>
-    </section>
+    <!-- Main area -->
+    <div class="main-area">
+      <EditorPane
+        ref="editorPaneRef"
+        :model-value="activeDoc.content"
+        :doc-id="activeDoc.id"
+        @update:model-value="onContentUpdate"
+        @stats="stats = $event"
+        @export-pdf="exportPdf"
+        @export-signable="exportSignable"
+      />
 
-    <section class="meta">
-      <label>
-        Title:
-        <input v-model="activeDoc.title" placeholder="Document title" />
-      </label>
-    </section>
+      <transition name="panel-slide">
+        <ShortcodePanel
+          v-if="panelOpen"
+          :used-keys="usedShortcodeKeys"
+          @close="panelOpen = false"
+          @insert="insertShortcode"
+        />
+      </transition>
+    </div>
 
-    <main
-      ref="editor"
-      class="editor"
-      contenteditable="true"
-      @input="onInput"
-      @keydown.tab.prevent="insertTabSpaces"
-      :key="activeDoc.id"
-      v-html="activeDoc.content"
-    ></main>
-
-    <footer>
-      Use <code>[curr_date]</code> anywhere in your content. It will be replaced during export.
+    <!-- Status bar -->
+    <footer class="status-bar">
+      <span>{{ stats.words }} words · {{ stats.characters }} characters</span>
+      <div class="status-bar-right">
+        <button class="status-panel-btn" @click="panelOpen = !panelOpen" title="Toggle shortcodes panel">
+          <font-awesome-icon :icon="panelOpen ? 'chevron-right' : 'chevron-down'" />
+          Shortcodes
+        </button>
+      </div>
     </footer>
+
   </div>
 </template>
 
 <script setup>
-import { computed, nextTick, ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue'
+import { themeStore as theme }   from './stores/themeStore.js'
+import { documentStore }         from './stores/documentStore.js'
+import TabBar        from './components/TabBar.vue'
+import EditorPane    from './components/EditorPane.vue'
+import ShortcodePanel from './components/ShortcodePanel.vue'
 
-const documents = ref([
-  { id: crypto.randomUUID(), title: 'Document 1', content: '<p>Start writing...</p>' }
-]);
-const activeDocId = ref(documents.value[0].id);
-const editor = ref(null);
+const themeOptions = [
+  { mode: 'light',  icon: 'sun',     label: 'Light mode'  },
+  { mode: 'dark',   icon: 'moon',    label: 'Dark mode'   },
+  { mode: 'system', icon: 'desktop', label: 'System theme' },
+]
 
-const activeDoc = computed(() =>
-  documents.value.find((doc) => doc.id === activeDocId.value) || documents.value[0]
-);
+const activeDoc = computed(() => documentStore.active)
 
-watch(activeDocId, async () => {
-  await nextTick();
-  if (editor.value) {
-    editor.value.innerHTML = activeDoc.value.content;
-  }
-});
+const stats = ref({ words: 0, characters: 0 })
 
-function newDoc() {
-  const newDocument = {
-    id: crypto.randomUUID(),
-    title: `Document ${documents.value.length + 1}`,
-    content: '<p></p>'
-  };
-  documents.value.push(newDocument);
-  activeDocId.value = newDocument.id;
+const panelOpen     = ref(false)
+const editorPaneRef = ref(null)
+
+function onContentUpdate(html) {
+  documentStore.updateContent(activeDoc.value.id, html)
 }
 
-function selectDoc(id) {
-  activeDocId.value = id;
+// Collect shortcode keys used in the current document
+const usedShortcodeKeys = computed(() => {
+  const editor = editorPaneRef.value?.editorRef?.value
+  if (!editor) return []
+  const keys = new Set()
+  editor.state.doc.descendants(node => {
+    if (node.type.name === 'shortcode') keys.add(node.attrs.key)
+  })
+  return [...keys]
+})
+
+function insertShortcode(key) {
+  const editor = editorPaneRef.value?.editorRef?.value
+  editor?.chain().focus().insertContent({ type: 'shortcode', attrs: { key } }).run()
 }
 
-function closeDoc(id) {
-  if (documents.value.length === 1) return;
+import { shortcodeStore } from './stores/shortcodeStore.js'
 
-  const index = documents.value.findIndex((doc) => doc.id === id);
-  documents.value = documents.value.filter((doc) => doc.id !== id);
-
-  if (activeDocId.value === id) {
-    const next = documents.value[index] || documents.value[index - 1] || documents.value[0];
-    activeDocId.value = next.id;
-  }
+// ── Exports ─────────────────────────────────────────────
+function resolveHtmlForExport(html) {
+  const div = document.createElement('div')
+  div.innerHTML = html
+  div.querySelectorAll('span[data-type="shortcode"]').forEach(el => {
+    const key   = el.getAttribute('data-shortcode-key')
+    el.replaceWith(document.createTextNode(shortcodeStore.resolve(key)))
+  })
+  return div.innerHTML
 }
 
-function onInput(event) {
-  activeDoc.value.content = event.target.innerHTML;
-}
-
-function execCmd(command) {
-  document.execCommand(command, false);
-  if (editor.value) {
-    activeDoc.value.content = editor.value.innerHTML;
-  }
-}
-
-function insertToken() {
-  document.execCommand('insertText', false, '[curr_date]');
-  if (editor.value) {
-    activeDoc.value.content = editor.value.innerHTML;
-  }
-}
-
-function insertTabSpaces() {
-  document.execCommand('insertText', false, '    ');
-  if (editor.value) {
-    activeDoc.value.content = editor.value.innerHTML;
-  }
-}
-
-function withResolvedTokens(html) {
-  const today = new Date().toISOString().split('T')[0];
-  return html.replaceAll('[curr_date]', today);
-}
-
-async function exportActive() {
+async function exportPdf() {
   if (!window.electronAPI?.exportPDF) {
-    alert('PDF export API unavailable. Ensure app is running in Electron.');
-    return;
+    alert('PDF export unavailable — run in Electron.')
+    return
   }
-
   const result = await window.electronAPI.exportPDF({
-    title: activeDoc.value.title,
-    htmlContent: withResolvedTokens(activeDoc.value.content)
-  });
+    title:       activeDoc.value.title,
+    htmlContent: resolveHtmlForExport(activeDoc.value.content),
+    signable:    false,
+  })
+  if (!result?.canceled) alert(`Saved: ${result.filePath}`)
+}
 
-  if (!result?.canceled) {
-    alert(`Exported to: ${result.filePath}`);
+async function exportSignable() {
+  if (!window.electronAPI?.exportPDF) {
+    alert('Export unavailable — run in Electron.')
+    return
   }
+  const result = await window.electronAPI.exportPDF({
+    title:       activeDoc.value.title,
+    htmlContent: resolveHtmlForExport(activeDoc.value.content),
+    signable:    true,
+  })
+  if (!result?.canceled) alert(`Saved: ${result.filePath}`)
 }
 </script>
+
+<style>
+.panel-slide-enter-active,
+.panel-slide-leave-active { transition: width 0.2s ease, opacity 0.2s ease; overflow: hidden; }
+.panel-slide-enter-from,
+.panel-slide-leave-to     { width: 0 !important; opacity: 0; }
+</style>
