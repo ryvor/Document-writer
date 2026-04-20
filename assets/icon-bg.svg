@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <title>Document Writer App Icon (Background)</title>
+  <defs>
+    <linearGradient id="bg" x1="96" y1="96" x2="928" y2="928" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f7f5ff" />
+      <stop offset="0.55" stop-color="#eef2ff" />
+      <stop offset="1" stop-color="#ede9fe" />
+    </linearGradient>
+    <linearGradient id="glow" x1="220" y1="900" x2="900" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6" stop-opacity="0.14" />
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="pen" x1="444" y1="678" x2="844" y2="770" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6" />
+      <stop offset="1" stop-color="#a78bfa" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square background (subtle) -->
+  <rect x="96" y="96" width="832" height="832" rx="196" fill="url(#bg)" />
+  <rect x="96" y="96" width="832" height="832" rx="196" fill="url(#glow)" />
+
+  <!-- Center mark -->
+  <g transform="translate(0 6)">
+    <!-- Soft shadow -->
+    <path
+      d="M312 164h400a52 52 0 0 1 52 52v592a52 52 0 0 1-52 52H312a52 52 0 0 1-52-52V216a52 52 0 0 1 52-52Z"
+      fill="#000"
+      opacity="0.07"
+      transform="translate(18 20)"
+    />
+
+    <!-- Page (flat, minimal outline) -->
+    <path
+      d="M312 164h400a52 52 0 0 1 52 52v592a52 52 0 0 1-52 52H312a52 52 0 0 1-52-52V216a52 52 0 0 1 52-52Z"
+      fill="#ffffff"
+      opacity="0.98"
+    />
+    <path
+      d="M312 164h400a52 52 0 0 1 52 52v592a52 52 0 0 1-52 52H312a52 52 0 0 1-52-52V216a52 52 0 0 1 52-52Z"
+      stroke="#111827"
+      stroke-opacity="0.16"
+      stroke-width="22"
+      stroke-linejoin="round"
+    />
+
+    <!-- Page lines -->
+    <path d="M356 332h316" stroke="#111827" stroke-opacity="0.34" stroke-width="34" stroke-linecap="round" />
+    <path d="M356 430h266" stroke="#111827" stroke-opacity="0.25" stroke-width="34" stroke-linecap="round" />
+    <path d="M356 528h228" stroke="#111827" stroke-opacity="0.2" stroke-width="34" stroke-linecap="round" />
+
+    <!-- Pen (flat) -->
+    <g transform="rotate(-35 640 720)">
+      <rect x="444" y="678" width="392" height="92" rx="46" fill="url(#pen)" />
+      <path d="M836 678L936 724L836 770Z" fill="#111827" opacity="0.92" />
+      <path d="M498 706h214" stroke="#ffffff" stroke-opacity="0.55" stroke-width="14" stroke-linecap="round" />
+    </g>
+  </g>
+</svg>

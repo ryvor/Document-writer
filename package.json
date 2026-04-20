@@ -9,38 +9,37 @@
     "dev": "concurrently \"vite\" \"wait-on tcp:5173 && electron .\"",
     "build": "vite build",
     "start": "electron .",
-    "dist": "npm run build && electron-builder"
+    "icons:build": "node tools/build-icons.mjs",
+    "dist": "npm run icons:build && npm run build && electron-builder",
+    "esign:serve": "node tools/esign-server.js"
   },
   "dependencies": {
-    "vue": "^3.5.13",
-    "@tiptap/vue-3": "^2.11.5",
-    "@tiptap/starter-kit": "^2.11.5",
-    "@tiptap/extension-underline": "^2.11.5",
-    "@tiptap/extension-text-align": "^2.11.5",
-    "@tiptap/extension-link": "^2.11.5",
-    "@tiptap/extension-image": "^2.11.5",
-    "@tiptap/extension-highlight": "^2.11.5",
-    "@tiptap/extension-color": "^2.11.5",
-    "@tiptap/extension-text-style": "^2.11.5",
-    "@tiptap/extension-task-list": "^2.11.5",
-    "@tiptap/extension-task-item": "^2.11.5",
-    "@tiptap/extension-table": "^2.11.5",
-    "@tiptap/extension-table-row": "^2.11.5",
-    "@tiptap/extension-table-cell": "^2.11.5",
-    "@tiptap/extension-table-header": "^2.11.5",
-    "@tiptap/extension-subscript": "^2.11.5",
-    "@tiptap/extension-superscript": "^2.11.5",
-    "@tiptap/extension-character-count": "^2.11.5",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
-    "@fortawesome/vue-fontawesome": "^3.0.8"
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^14.1.0",
+    "prosemirror-commands": "^1.6.2",
+    "prosemirror-history": "^1.4.1",
+    "prosemirror-inputrules": "^1.4.0",
+    "prosemirror-keymap": "^1.2.2",
+    "prosemirror-markdown": "^1.13.1",
+    "prosemirror-model": "^1.24.0",
+    "prosemirror-schema-basic": "^1.2.4",
+    "prosemirror-schema-list": "^1.5.0",
+    "prosemirror-state": "^1.4.3",
+    "prosemirror-view": "^1.38.0",
+    "turndown": "^7.2.0",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.3",
     "concurrently": "^9.1.2",
     "electron": "^35.1.4",
     "electron-builder": "^25.1.8",
+    "png2icons": "^2.0.1",
+    "sharp": "^0.34.5",
     "vite": "^6.2.1",
     "wait-on": "^8.0.3"
   },
@@ -55,8 +54,17 @@
     "directories": {
       "buildResources": "assets"
     },
-    "mac": { "target": "dmg" },
-    "win": { "target": "nsis" },
-    "linux": { "target": "AppImage" }
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
   }
 }

@@ -13,7 +13,7 @@ export const shortcodeStore = reactive({
   resolve(key) {
     if (BUILTIN_KEYS.has(key)) return resolveBuiltin(key)
     const found = this.custom.find(s => s.key === key)
-    return found ? found.value : `{${key}}`
+    return found ? found.value : `{{${key}}}`
   },
 
   isBuiltin(key) { return BUILTIN_KEYS.has(key) },

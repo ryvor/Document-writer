@@ -10,10 +10,10 @@
     </div>
 
     <!-- Used custom shortcodes — one accordion per key -->
-    <template v-if="usedCustomKeys.length">
-      <div class="sc-section-label">Used in Document</div>
+    <template v-if="usedVariableKeys.length">
+      <div class="sc-section-label">Variables in Document</div>
       <div
-        v-for="key in usedCustomKeys"
+        v-for="key in usedVariableKeys"
         :key="key"
         class="sc-used-card"
       >
@@ -23,19 +23,21 @@
         </div>
         <div v-if="expanded.has(key)" class="sc-used-body">
           <label class="sc-field-label">Value</label>
-          <input
-            class="sc-input"
-            :value="getCustomValue(key)"
-            @input="shortcodeStore.update(key, $event.target.value)"
-            placeholder="Shortcode value…"
-          />
-          <label class="sc-field-label">Description</label>
-          <input
-            class="sc-input"
-            :value="getCustomDesc(key)"
-            @input="updateDesc(key, $event.target.value)"
-            placeholder="Optional description…"
-          />
+          <div class="sc-row">
+            <input
+              class="sc-input"
+              :value="getVarValue(key)"
+              @input="setVarValue(key, $event.target.value)"
+              placeholder="Variable value…"
+            />
+            <button
+              class="sc-clear-btn"
+              @click="clearVar(key)"
+              title="Clear override (use default)"
+            >
+              <font-awesome-icon icon="rotate-left" />
+            </button>
+          </div>
         </div>
       </div>
     </template>
@@ -95,13 +97,15 @@
 import { ref, computed, reactive } from 'vue'
 import { BUILTIN_DEFINITIONS, BUILTIN_KEYS } from '../utils/builtinShortcodes.js'
 import { shortcodeStore } from '../stores/shortcodeStore.js'
+import { documentStore } from '../stores/documentStore.js'
 
 const props = defineProps({
+  docId:    { type: String, required: true },
   usedKeys: { type: Array, default: () => [] },
 })
 const emit = defineEmits(['close', 'insert'])
 
-const usedCustomKeys = computed(() =>
+const usedVariableKeys = computed(() =>
   props.usedKeys.filter(k => !BUILTIN_KEYS.has(k))
 )
 
@@ -114,15 +118,24 @@ function toggleExpanded(key) {
   else expanded.add(key)
 }
 
-function getCustomValue(key) {
+function docForId() {
+  return documentStore.documents.find(d => d.id === props.docId) || documentStore.active
+}
+
+function getVarValue(key) {
+  const doc = docForId()
+  const vars = doc?.shortcodeVars || {}
+  if (Object.prototype.hasOwnProperty.call(vars, key)) return vars[key]
   return shortcodeStore.custom.find(s => s.key === key)?.value ?? ''
 }
-function getCustomDesc(key) {
-  return shortcodeStore.custom.find(s => s.key === key)?.description ?? ''
+
+function setVarValue(key, value) {
+  if (value === '') documentStore.removeShortcodeVar(props.docId, key)
+  else documentStore.setShortcodeVar(props.docId, key, value)
 }
-function updateDesc(key, desc) {
-  const found = shortcodeStore.custom.find(s => s.key === key)
-  if (found) { found.description = desc; shortcodeStore._save() }
+
+function clearVar(key) {
+  documentStore.removeShortcodeVar(props.docId, key)
 }
 
 const newKey   = ref('')

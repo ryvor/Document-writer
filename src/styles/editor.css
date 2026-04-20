@@ -1,35 +1,35 @@
-/* ── TipTap editor content ───────────────────────────── */
-.tiptap {
+/* ── ProseMirror editor content ──────────────────────── */
+.md-prosemirror {
   outline: none;
-  padding: 48px 56px;
-  min-height: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  line-height: 1.75;
-  font-size: 14px;
-  color: var(--text);
+  padding: 0;
+  min-height: 200px;
+  max-width: none;
+  margin: 0;
+  line-height: var(--editor-line-height, 1.75);
+  font-size: var(--editor-font-size, 14px);
+  color: #1e1e1e;
 }
 
-.tiptap p            { margin: 0.5em 0; }
-.tiptap h1           { font-size: 2em;    line-height: 1.2; margin: 1em 0 0.4em; }
-.tiptap h2           { font-size: 1.5em;  line-height: 1.3; margin: 0.9em 0 0.35em; }
-.tiptap h3           { font-size: 1.2em;  line-height: 1.4; margin: 0.8em 0 0.3em; }
-.tiptap h4           { font-size: 1.05em; line-height: 1.5; margin: 0.7em 0 0.25em; font-weight: 700; }
-.tiptap h5           { font-size: 0.9em;  line-height: 1.5; margin: 0.6em 0 0.2em; font-weight: 700; }
-.tiptap h6           { font-size: 0.8em;  line-height: 1.5; margin: 0.5em 0 0.2em; font-weight: 700; color: var(--text2); }
+.md-prosemirror p            { margin: 0.5em 0; }
+.md-prosemirror h1           { font-size: 2em;    line-height: 1.2; margin: 1em 0 0.4em; }
+.md-prosemirror h2           { font-size: 1.5em;  line-height: 1.3; margin: 0.9em 0 0.35em; }
+.md-prosemirror h3           { font-size: 1.2em;  line-height: 1.4; margin: 0.8em 0 0.3em; }
+.md-prosemirror h4           { font-size: 1.05em; line-height: 1.5; margin: 0.7em 0 0.25em; font-weight: 700; }
+.md-prosemirror h5           { font-size: 0.9em;  line-height: 1.5; margin: 0.6em 0 0.2em; font-weight: 700; }
+.md-prosemirror h6           { font-size: 0.8em;  line-height: 1.5; margin: 0.5em 0 0.2em; font-weight: 700; color: var(--text2); }
 
-.tiptap ul,
-.tiptap ol           { padding-left: 1.8em; margin: 0.5em 0; }
-.tiptap li           { margin: 0.2em 0; }
-.tiptap li p         { margin: 0; }
+.md-prosemirror ul,
+.md-prosemirror ol           { padding-left: 1.8em; margin: 0.5em 0; }
+.md-prosemirror li           { margin: 0.2em 0; }
+.md-prosemirror li p         { margin: 0; }
 
-.tiptap a {
+.md-prosemirror a {
   color: var(--accent);
   text-decoration: underline;
 }
-.tiptap a:hover { opacity: 0.8; }
+.md-prosemirror a:hover { opacity: 0.8; }
 
-.tiptap code {
+.md-prosemirror code {
   font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Courier New', monospace;
   font-size: 0.88em;
   background: var(--bg3);
@@ -37,7 +37,7 @@
   border-radius: 3px;
 }
 
-.tiptap pre {
+.md-prosemirror pre {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -48,13 +48,13 @@
   font-size: 0.88em;
   line-height: 1.6;
 }
-.tiptap pre code {
+.md-prosemirror pre code {
   background: none;
   padding: 0;
   font-size: inherit;
 }
 
-.tiptap blockquote {
+.md-prosemirror blockquote {
   border-left: 3px solid var(--accent);
   padding: 4px 0 4px 16px;
   color: var(--text2);
@@ -62,13 +62,13 @@
   font-style: italic;
 }
 
-.tiptap hr {
+.md-prosemirror hr {
   border: none;
   border-top: 1px solid var(--border);
   margin: 1.5em 0;
 }
 
-.tiptap img {
+.md-prosemirror img {
   max-width: 100%;
   border-radius: 6px;
   display: block;
@@ -144,62 +144,89 @@
   padding: 0.1em 0;
 }
 
-/* ── Shortcode nodes ──────────────────────────────────── */
-.shortcode-node {
-  position: relative;
+/* ── Shortcode nodes (ProseMirror NodeView) ────────────── */
+.sc-node {
   display: inline;
-  line-height: inherit;
-}
-
-.sc-value {
-  display: inline;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: var(--sc-color);
-  text-underline-offset: 3px;
-  background: var(--sc-bg);
   border-radius: 3px;
   padding: 0 3px;
   cursor: default;
   color: inherit;
   font-size: inherit;
+  line-height: inherit;
+  white-space: pre;
 }
 
-.sc-tooltip {
-  position: absolute;
-  bottom: calc(100% + 5px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--tooltip-bg);
-  color: var(--tooltip-text);
-  font-family: 'Fira Code', 'Cascadia Code', monospace;
-  font-size: 10px;
-  line-height: 1;
-  padding: 3px 7px;
-  border-radius: 4px;
-  white-space: nowrap;
-  pointer-events: none;
-  box-shadow: 0 2px 10px var(--shadow);
-  z-index: 100;
-  opacity: 0;
-  transition: opacity 0.12s;
-}
-.sc-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 4px solid transparent;
-  border-top-color: var(--tooltip-bg);
+.sc-node.show-value {
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-color: var(--sc-underline);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  background: var(--sc-bg);
 }
 
-.shortcode-node:hover .sc-tooltip,
-.shortcode-node.is-selected .sc-tooltip { opacity: 1; }
+.sc-node.show-key {
+  font-family: 'Fira Code', 'Cascadia Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: transparent;
+  color: var(--sc-color);
+}
 
-.shortcode-node.is-selected .sc-value {
+.sc-node.is-selected {
   outline: 2px solid var(--sc-color);
   outline-offset: 1px;
+}
+
+/* ── Sign area nodes (ProseMirror NodeView) ────────────── */
+.sign-area-node {
+  display: block;
+  border: 1px dashed var(--border, #d1d5db);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 0.6em 0;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.sign-area-node:hover {
+  border-color: var(--accent, #2563eb);
+  background: var(--bg2, #f9fafb);
+}
+
+.sign-area-node.is-selected {
+  outline: 2px solid var(--accent, #2563eb);
+  outline-offset: 2px;
+}
+
+.sign-area-node.is-unsigned .sign-area-hint {
+  color: var(--text3, #9ca3af);
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+.sign-area-node.is-signed {
+  border-style: solid;
+  border-color: var(--accent, #2563eb);
+}
+
+.sign-area-label {
+  font-size: 0.78em;
+  color: var(--text2, #555);
+  margin-bottom: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sign-area-stamp__name {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.sign-area-stamp__date {
+  font-size: 0.82em;
+  color: var(--text2, #555);
+  margin-top: 2px;
 }
 
 /* ── Placeholder ─────────────────────────────────────── */

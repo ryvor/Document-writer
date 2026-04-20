@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <title>Document Writer App Icon (Transparent)</title>
+  <defs>
+    <linearGradient id="pen" x1="444" y1="678" x2="844" y2="770" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6" />
+      <stop offset="1" stop-color="#a78bfa" />
+    </linearGradient>
+  </defs>
+
+  <!-- Soft shadow -->
+  <path
+    d="M312 164h400a52 52 0 0 1 52 52v592a52 52 0 0 1-52 52H312a52 52 0 0 1-52-52V216a52 52 0 0 1 52-52Z"
+    fill="#000"
+    opacity="0.08"
+    transform="translate(18 20)"
+  />
+
+  <!-- Page (flat, minimal outline) -->
+  <path
+    d="M312 164h400a52 52 0 0 1 52 52v592a52 52 0 0 1-52 52H312a52 52 0 0 1-52-52V216a52 52 0 0 1 52-52Z"
+    fill="#ffffff"
+  />
+  <path
+    d="M312 164h400a52 52 0 0 1 52 52v592a52 52 0 0 1-52 52H312a52 52 0 0 1-52-52V216a52 52 0 0 1 52-52Z"
+    stroke="#111827"
+    stroke-opacity="0.18"
+    stroke-width="22"
+    stroke-linejoin="round"
+  />
+
+  <!-- Page lines (lighter) -->
+  <path d="M356 332h316" stroke="#111827" stroke-opacity="0.35" stroke-width="34" stroke-linecap="round" />
+  <path d="M356 430h266" stroke="#111827" stroke-opacity="0.26" stroke-width="34" stroke-linecap="round" />
+  <path d="M356 528h228" stroke="#111827" stroke-opacity="0.2" stroke-width="34" stroke-linecap="round" />
+
+  <!-- Pen (flat, no outline) -->
+  <g transform="rotate(-35 640 720)">
+    <rect x="444" y="678" width="392" height="92" rx="46" fill="url(#pen)" />
+    <!-- Nib -->
+    <path d="M836 678L936 724L836 770Z" fill="#111827" opacity="0.92" />
+    <!-- Shine -->
+    <path d="M498 706h214" stroke="#ffffff" stroke-opacity="0.55" stroke-width="14" stroke-linecap="round" />
+  </g>
+</svg>
